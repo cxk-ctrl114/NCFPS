@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NCFPS · 纯文字框架</title>
     <style>
-        /* 极简重置，只保留必要间距 */
+        /* 极简重置 */
         * {
             margin: 0;
             padding: 0;
@@ -21,7 +21,7 @@
             margin: 0 auto;
         }
 
-        /* 两栏布局：左侧主内容，右侧公告 */
+        /* 两栏布局 */
         .wrapper {
             display: flex;
             gap: 3rem;
@@ -30,7 +30,7 @@
         }
         .main {
             flex: 2;
-            min-width: 0; /* 防止溢出 */
+            min-width: 0;
         }
         .sidebar {
             flex: 1;
@@ -46,7 +46,7 @@
             gap: 1rem;
             border-bottom: 1px solid #aaa;
             padding-bottom: 0.75rem;
-            margin-bottom: 2rem;
+            margin-bottom: 0.5rem;
         }
         .logo-placeholder {
             width: 48px;
@@ -66,49 +66,60 @@
             letter-spacing: 0.5px;
         }
 
-        /* 一级标题 + 悬停展开二级标题 */
-        .title-drop {
-            display: inline-block;
+        /* ===== 导航栏：一级选项 ===== */
+        .nav-bar {
+            display: flex;
+            gap: 2rem;
+            padding: 0.5rem 0 0.5rem 0;
+            border-bottom: 1px solid #aaa;
+            margin-bottom: 1.8rem;
             position: relative;
-            margin: 1.2rem 0 0.8rem 0;
-            cursor: default;
         }
-        .title-drop h1 {
-            font-size: 2.2rem;
-            font-weight: 600;
-            border-bottom: 2px solid #000;
-            padding-bottom: 0.2rem;
-            display: inline-block;
+        .nav-item {
+            position: relative;
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+            padding: 0.2rem 0;
         }
-        .sub-menu {
-            display: none;
+        .nav-item:hover {
+            text-decoration: underline;
+        }
+
+        /* 二级菜单框（下拉） */
+        .sub-dropdown {
+            display: none; /* 默认隐藏 */
             position: absolute;
             top: 100%;
             left: 0;
             background: #ffffff;
             border: 1px solid #888;
             padding: 0.6rem 1.2rem;
-            min-width: 160px;
+            min-width: 150px;
             list-style: none;
-            margin-top: 6px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            margin-top: 4px;
             z-index: 10;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
-        .sub-menu li {
+        .sub-dropdown li {
             padding: 0.2rem 0;
             border-bottom: 1px dashed #ddd;
         }
-        .sub-menu li:last-child {
+        .sub-dropdown li:last-child {
             border-bottom: none;
         }
-        .sub-menu a {
+        .sub-dropdown a {
             text-decoration: none;
             color: #000;
+            display: block;
         }
-        .sub-menu a:hover {
+        .sub-dropdown a:hover {
             text-decoration: underline;
         }
-        .title-drop:hover .sub-menu {
+
+        /* 显示状态（由JS切换） */
+        .sub-dropdown.open {
             display: block;
         }
 
@@ -130,7 +141,6 @@
         }
         .placeholder-desc {
             color: #999;
-            font-style: normal;
             font-size: 0.9rem;
         }
 
@@ -158,14 +168,12 @@
             display: block;
         }
 
-        /* 分割线默认样式（hr） */
         hr {
             border: none;
             border-top: 1px solid #aaa;
             margin: 1.8rem 0;
         }
 
-        /* 响应式 */
         @media (max-width: 720px) {
             .wrapper {
                 flex-direction: column;
@@ -178,6 +186,10 @@
                 border-top: 1px solid #ccc;
                 padding-top: 1.5rem;
             }
+            .nav-bar {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
@@ -189,61 +201,80 @@
         <span class="project-name">NCFPS</span>
     </header>
 
+    <!-- ===== 导航栏：一级选项 ===== -->
+    <nav class="nav-bar">
+        <!-- 选项1 -->
+        <div class="nav-item" data-target="menu1">
+            首页
+            <ul class="sub-dropdown" id="menu1">
+                <li><a href="#">首页概览</a></li>
+                <li><a href="#">最新动态</a></li>
+            </ul>
+        </div>
+        <!-- 选项2 -->
+        <div class="nav-item" data-target="menu2">
+            关于
+            <ul class="sub-dropdown" id="menu2">
+                <li><a href="#">项目介绍</a></li>
+                <li><a href="#">团队成员</a></li>
+                <li><a href="#">历史沿革</a></li>
+            </ul>
+        </div>
+        <!-- 选项3 -->
+        <div class="nav-item" data-target="menu3">
+            服务
+            <ul class="sub-dropdown" id="menu3">
+                <li><a href="#">技术支持</a></li>
+                <li><a href="#">文档中心</a></li>
+            </ul>
+        </div>
+        <!-- 选项4 -->
+        <div class="nav-item" data-target="menu4">
+            联系
+            <ul class="sub-dropdown" id="menu4">
+                <li><a href="#">邮箱</a></li>
+                <li><a href="#">讨论区</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <!-- ===== 两栏主体 ===== -->
     <div class="wrapper">
 
         <!-- ======== 左侧主要内容 ======== -->
         <div class="main">
 
-            <!-- 一级标题（悬停展开二级标题） -->
-            <div class="title-drop">
-                <h1>NCFPS · 首页</h1>
-                <ul class="sub-menu">
-                    <li><a href="#">关于本站</a></li>
-                    <li><a href="#">最新动态</a></li>
-                    <li><a href="#">成员专区</a></li>
-                    <li><a href="#">帮助文档</a></li>
-                </ul>
-            </div>
-
-            <!-- 分割线 -->
-            <hr />
-
-            <!-- 首页板块：板块1（占位） -->
+            <!-- 首页板块1（占位） -->
             <div class="section-block">
                 <h2>板块一</h2>
                 <p class="placeholder-desc">（此处预留内容位置）</p>
                 <p> </p>
             </div>
 
-            <!-- 分割线 -->
             <hr />
 
-            <!-- 首页板块：板块2（占位） -->
+            <!-- 首页板块2（占位） -->
             <div class="section-block">
                 <h2>板块二</h2>
                 <p class="placeholder-desc">（此处预留内容位置）</p>
                 <p> </p>
             </div>
 
-            <!-- 分割线 -->
             <hr />
 
-            <!-- 首页板块：板块3（占位） -->
+            <!-- 首页板块3（占位） -->
             <div class="section-block">
                 <h2>板块三</h2>
                 <p class="placeholder-desc">（此处预留内容位置）</p>
                 <p> </p>
             </div>
 
-            <!-- 更多板块可依此类推 -->
-
         </div>
         <!-- ======== 左侧 main 结束 ======== -->
 
         <!-- ======== 右侧公告竖列 ======== -->
         <aside class="sidebar">
-            <h3>📌 公告</h3>
+            <h3>公告</h3>
             <ul>
                 <li>
                     <span class="date">2026-07-15</span>
@@ -267,11 +298,75 @@
     </div>
     <!-- ===== wrapper 结束 ===== -->
 
-    <!-- 页脚（可选） -->
+    <!-- 页脚 -->
     <hr style="margin-top: 3rem;" />
     <footer style="font-size: 0.8rem; color: #888; text-align: center; padding: 1rem 0;">
         &copy; 2026 NCFPS · 纯文字框架 · 保留所有位置
     </footer>
+
+    <!-- ===== JavaScript：点击展开/关闭二级菜单 ===== -->
+    <script>
+        (function() {
+            // 获取所有导航项
+            const navItems = document.querySelectorAll('.nav-item');
+            // 存储当前打开的菜单（如果有）
+            let currentOpenMenu = null;
+
+            // 关闭所有菜单
+            function closeAllMenus() {
+                document.querySelectorAll('.sub-dropdown.open').forEach(function(menu) {
+                    menu.classList.remove('open');
+                });
+                currentOpenMenu = null;
+            }
+
+            // 切换指定菜单
+            function toggleMenu(menuId) {
+                const menu = document.getElementById(menuId);
+                if (!menu) return;
+
+                // 如果当前打开的菜单就是被点击的，则关闭它（点击同一项切换）
+                if (currentOpenMenu === menu) {
+                    menu.classList.remove('open');
+                    currentOpenMenu = null;
+                    return;
+                }
+
+                // 否则关闭所有，然后打开指定菜单
+                closeAllMenus();
+                menu.classList.add('open');
+                currentOpenMenu = menu;
+            }
+
+            // 为每个导航项绑定点击事件
+            navItems.forEach(function(item) {
+                item.addEventListener('click', function(e) {
+                    // 阻止事件冒泡，避免触发document上的关闭
+                    e.stopPropagation();
+                    const targetId = this.getAttribute('data-target');
+                    if (targetId) {
+                        toggleMenu(targetId);
+                    }
+                });
+            });
+
+            // 点击页面其他区域（菜单外）关闭所有菜单
+            document.addEventListener('click', function(e) {
+                // 如果点击的元素不在任何 .nav-item 内部，则关闭所有
+                const isClickInsideNav = e.target.closest('.nav-item');
+                if (!isClickInsideNav) {
+                    closeAllMenus();
+                }
+            });
+
+            // 按 ESC 键也可以关闭
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeAllMenus();
+                }
+            });
+        })();
+    </script>
 
 </body>
 </html>
